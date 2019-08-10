@@ -1,0 +1,62 @@
+#author: Jyotsna Namdeo Nakte
+
+from __future__ import division
+import pandas as pd
+import csv
+import numpy as np
+from pandas import DataFrame
+import math
+import statistics
+
+def inputData():
+    df = pd.read_csv( 'Diabetess.csv', delimiter=',' )
+    # print(df)
+    return df
+
+def find(column,target):
+    sum_class0=[]
+    sum_class1=[]
+    no_class0=0
+    no_class1=0
+    for i in range( len( column ) ):
+        if(target[i]==0):
+            sum_class0.append(column[i])
+            no_class0 = no_class0+1
+        else:
+            sum_class1.append(column[i])
+            no_class1 = no_class1 + 1
+    meanclass0=statistics.mean(sum_class0)
+    meanclass1=statistics.mean(sum_class1)
+    varianceclass0=statistics.variance(sum_class0)
+    varianceclass1 = statistics.variance(sum_class1)
+    value= abs(meanclass0-meanclass1)/math.sqrt((varianceclass0/no_class0)+(varianceclass1/no_class1))
+    return value
+
+def main():
+    dataframe=inputData()
+    print("FISHER'S RATIO OF ATTRIBUTES")
+    print('------------------------------------------------------------------------------------------------------------------------------------------')
+    fischervalue=[]
+    target=dataframe['Class (1=positive for diabetes, 0 = negative)'].tolist()
+    value1 = find( dataframe['No.times pregnant'].tolist(), target )
+    print('No.times pregnant: ' +str(value1))
+    #print('------------------------------------------------------------------------------------------------------------------------------------------' )
+    value2 = find( dataframe['Plasma glucose concentration'].tolist(), target )
+    print( 'Plasma glucose concentration: ' + str(value2))
+    value3 = find( dataframe['Diastolic blood pressure'].tolist(), target )
+    print( 'Diastolic blood pressure: ' + str(value3))
+    value4 = find( dataframe['Tricepts skin fold thickness'].tolist(), target )
+    print( 'Tricepts skin fold thickness: ' + str(value4) )
+    value5 = find( dataframe['2-hr serum insulin'].tolist(), target )
+    print( '2-hr serum insulin: ' + str(value5) )
+    value6 = find( dataframe['Body mass index'].tolist(), target )
+    print( 'Body mass index: ' + str(value6) )
+    value7 = find( dataframe['Diabetes pedigree function'].tolist(), target )
+    print( 'Diabetes pedigree function: ' + str(value7) )
+    value8 = find( dataframe['Age'].tolist(), target )
+    print( 'Age: ' + str(value8) )
+
+
+
+if __name__ == '__main__':
+    main()
